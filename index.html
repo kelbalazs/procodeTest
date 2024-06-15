@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Cat Images</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <div v-if="loading" class="spinner"></div>
+    <div v-show="errorMessage !== null">
+        <component :is="errorMessage"></component>
+      </div>    <div id="imageContainer" v-show="!errorMessage">
+      <div class="cat-image-container" v-for="imageUrl in imageUrls" :key="imageUrl">
+        <img :src="imageUrl" />
+      </div>
+    </div>
+    <button @click="loadMoreCatImages" :disabled="loading">Load More Cat Images</button>
+  </div>
+  <script src="https://unpkg.com/vue@3"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html> 

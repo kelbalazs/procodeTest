@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Cat Images</title>
+  <style>
+    #imageContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-gap: 10px;
+      padding: 20px;
+    }
+
+    .cat-image-container {
+      text-align: center;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="imageContainer">
+      <div class="cat-image-container" v-for="imageUrl in imageUrls" :key="imageUrl">
+        <img :src="imageUrl" />
+      </div>
+    </div>
+    <button @click="loadMoreCatImages">Load More Cat Images</button>
+  </div>
+
+  <!-- Include Vue.js from the CDN -->
+  <script src="https://unpkg.com/vue@3"></script>
+
+  <script>
+    // Create a new Vue instance
+    const app = Vue.createApp({
+      data() {
+        return {
+          numImagesPerLoad: 10,
+          imageUrls: []
+        };
+      },
+      methods: {
+        loadCatImages(count) {
+          for (let i = 0; i < count; i++) {
+            fetch('https://cataas.com/cat')
+              .then(response => response.blob())
+              .then(blob => {
+                const imageUrl = URL.createObjectURL(blob);
+                this.imageUrls.push(imageUrl);
+              })
+              .catch(error => console.error(error));
+          }
+        },
+        loadMoreCatImages() {
+          this.loadCatImages(this.numImagesPerLoad);
+        }
+      },
+      mounted() {
+        this.loadCatImages(this.numImagesPerLoad);
+      }
+    });
+
+    // Mount the Vue instance
+    app.mount('#app');
+  </script>
+</body>
+</html>
